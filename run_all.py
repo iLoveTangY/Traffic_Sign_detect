@@ -31,8 +31,9 @@ def visualize_result(img, detect_ret, pred, thresh=0.998, show=True, save_image=
 
     label_dict = get_label_dict_from_string(COLLECT)
     # 绘制结果
-    visualize_boxes_and_labels_on_image_array(img, bbox, classes, scores, label_dict, line_thickness=2,
-                                              use_normalized_coordinates=False, min_score_thresh=thresh)
+    visualize_boxes_and_labels_on_image_array(img, bbox, classes, scores, label_dict, line_thickness=4,
+                                              use_normalized_coordinates=False, min_score_thresh=thresh,
+                                              skip_labels=True, skip_scores=True)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     im = Image.fromarray(img)
     if show:
@@ -79,7 +80,8 @@ def detect_images(image_paths, mtcnn_detector, model):
         # 忽略掉背景图片(将分数和坐标全部设置为0)
         for ii in bg_box[0]:
             boxes_c[ii, :] = 0
-        visualize_result(img, boxes_c, pred, thresh=0.998, show=True, save_image=True, save_path=str(file)+"_detectd.jpg")
+        visualize_result(img, boxes_c, pred, thresh=0.998, show=True, save_image=False,
+                         save_path=str(file) + "_detectd.png")
 
 
 def load_model(model_path):
@@ -100,7 +102,7 @@ def load_model(model_path):
     epoch = [7, 7, 7]
     model_path = ['%s-%s' % (x, y) for x, y in zip(prefix, epoch)]
 
-    # 加载PNet, 这里只能用FcnDetector
+    # 加载PNet
     p_net = FcnDetector(P_Net, model_path[0])
     detectors[0] = p_net
 
@@ -121,7 +123,7 @@ def load_model(model_path):
 
 def eval_model():
     dense_net_model, mtcnn_detector = load_model('./model')
-    test_floder = './test'
+    test_floder = r'C:\Users\DELL\Desktop\1'
     files = os.listdir(test_floder)
     image_paths = []
     for file in files:
