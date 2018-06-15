@@ -297,10 +297,10 @@ class MtcnnDetector(object):
             while min(current_height, current_width) > net_size:
                 current_y_list = range(0, current_height - net_size + 1, self.stride) if (
                                                                                                  current_height - net_size) % self.stride == 0 \
-                    else range(0, current_height - net_size + 1, self.stride) + [current_height - net_size]
+                    else list(range(0, current_height - net_size + 1, self.stride)) + [current_height - net_size]
                 current_x_list = range(0, current_width - net_size + 1, self.stride) if (
                                                                                                 current_width - net_size) % self.stride == 0 \
-                    else range(0, current_width - net_size + 1, self.stride) + [current_width - net_size]
+                    else list(range(0, current_width - net_size + 1, self.stride)) + [current_width - net_size]
 
                 for current_y in current_y_list:
                     for current_x in current_x_list:
